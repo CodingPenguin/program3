@@ -24,65 +24,11 @@ def pnamedtuple(type_name, field_names, mutable = False,  defaults =  {}):
         show_listing(class_definition)
         traceback.print_exc()
     return name_space[type_name]
-
-
-class Point:
-    _fields = ['x', 'y']
-    
-    def __init__(self, x, y, mutable=False):
-        self.x = x
-        self.y = y
-        self._mutable = mutable
-    
-    def __repr__(self):
-        return f'Point(x={self.x}, y={self.y})'
-    
-    def get_x(self):
-        return self.x
-    
-    def get_y(self):
-        return self.y
-    
-    def __getitem__(self, idx):
-        if idx == 0:
-            return self.get_x()
-        elif idx == 1:
-            return self.get_y()
-        else:
-            raise IndexError('nope')
-    
-    def __eq__(self, comparison):
-        if type(comparison) == type(self):
-            if self.get_x() == comparison.get_x() and self.get_y() == comparison.get_y():
-                return True
-        return False
-        
-    def _asdict(self):
-        return {'x': self.get_x(), 'y': self.get_y()}
-    
-    def _make(self, arg):
-        x, y = arg
-        return Point(x, y)
-    
-    def _replace(self, **kargs):
-        replacers = dict(kargs)
-        
-        if self._mutable:
-            for key in replacers.keys():
-                self.__dict__[key] = replacers[key]
-        else:
-            if 'x' not in replacers:
-                return Point(kargs, x=self.get_x())
-            elif 'y' not in replacers:
-                return Point(kargs, y=self.get_y())
         
         
 if __name__ == '__main__':
     # Test simple pnamedtuple below in script: Point=pnamedtuple('Point','x,y')
-    point = Point(x=1, y=1)
-    print(point)
-    print(point._replace(x=2))
-    print(point)
+
     #driver tests
     import driver  
     driver.default_file_name = 'bscp3W22.txt'

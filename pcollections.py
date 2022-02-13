@@ -1,3 +1,8 @@
+# Submitter: bryanttp(Phan, Bryant)
+# Partner  : dannyhn5(Nguyen, Danny)
+# We certify that we worked cooperatively on this programming
+#   assignment, according to the rules for pair programming
+  
 import re, traceback, keyword
 
 def pnamedtuple(type_name, field_names, mutable = False,  defaults =  {}):
@@ -7,7 +12,31 @@ def pnamedtuple(type_name, field_names, mutable = False,  defaults =  {}):
 
     # put your code here
     # bind class_definition (used below) to the string constructed for the class
-    class_definition = f'{type_name}("{field_names}", {mutable})'
+    class_template = '''\
+    class {class_name}:
+        _fields = [{fields}]
+        _mutable = {mutable}
+        
+        {init_block}
+        
+        {repr_block}
+        
+        {get_block}
+        
+        {getitem_block}
+        
+        {eq_block}
+        
+        {_asdict_block}
+        
+        {_make_block}
+        
+        {_replace_block}
+        
+        #{setattr_block}
+    '''
+
+    def gen_init():
 
     # Debugging aid: uncomment next call to show_listing to display source code
     # show_listing(class_definition)
@@ -24,8 +53,9 @@ def pnamedtuple(type_name, field_names, mutable = False,  defaults =  {}):
         show_listing(class_definition)
         traceback.print_exc()
     return name_space[type_name]
-        
-        
+
+
+    
 if __name__ == '__main__':
     # Test simple pnamedtuple below in script: Point=pnamedtuple('Point','x,y')
 

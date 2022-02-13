@@ -36,20 +36,20 @@ def pnamedtuple(type_name, field_names, mutable = False,  defaults =  {}):
         #{setattr_block} 
     '''
 
-    def gen_init():
-        self_assign = ''
-        default_params = ''
-        for field_name in field_names:
-            self_assign += f'self.{field_name} = {field_name}\n'
-            
-        for idx, key in enumerate(defaults.keys()):
-            default_params += f'{key}={defaults[key]}, ' if idx < len(list(defaults.keys())) - 1 else f'{key}={defaults[key]}'
-            
-        return \
-            '''
-                def __init__(self, {default_params}):
-                    {assignments}
-            '''.format(default_params=default_params, assignments=self_assign)
+    # def gen_init():
+    #     self_assign = ''
+    #     default_params = ''
+    #     for field_name in field_names:
+    #         self_assign += f'self.{field_name} = {field_name}\n'
+    #
+    #     for idx, key in enumerate(defaults.keys()):
+    #         default_params += f'{key}={defaults[key]}, ' if idx < len(list(defaults.keys())) - 1 else f'{key}={defaults[key]}'
+    #
+    #     return \
+    #         '''
+    #             def __init__(self, {default_params}):
+    #                 {assignments}
+    #         '''.format(default_params=default_params, assignments=self_assign)
         
     def gen_repr():
         if type(field_names) == str:
@@ -101,7 +101,7 @@ def pnamedtuple(type_name, field_names, mutable = False,  defaults =  {}):
     
     def gen_asdict():
         add_keys = ''
-        for field_name in field_names):
+        for field_name in field_names:
             add_keys += \
             '''
                 attr_dict[{field_name}] = self.get_{field_name}()

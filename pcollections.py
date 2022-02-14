@@ -12,6 +12,26 @@ def pnamedtuple(type_name, field_names, mutable = False,  defaults =  {}):
 
     # put your code here
     # bind class_definition (used below) to the string constructed for the class
+    
+    pattern = '[a-zA-Z][\w]*'
+    
+    # type_name legality
+    if type_name in keyword.kwlist or not bool(re.match(pattern, type_name)):
+        raise SyntaxError(f'{type_name} is not a legal string or is a keyword')
+    
+    # field_names legality
+    if type(field_names) == list: names = field_names
+    elif type(field_names) == str: names = re.split("[, ]+", field_names)
+    else: raise TypeError
+    for name in names:
+        if name in keyword.kwlist or not bool(re.match(pattern, name)):
+            raise SyntaxError(f'{name} is not a legal string or is a keyword')
+        
+    # defaults legality
+    for key in defaults:
+        if key not in names:
+            raise SyntaxError(f'{key} not a valid argument name')
+    
     class_template = '''\
     class {class_name}:
         _fields = [{fields}]
@@ -36,7 +56,12 @@ def pnamedtuple(type_name, field_names, mutable = False,  defaults =  {}):
         #{setattr_block}
     '''
 
-    def gen_init():
+    def gen_init() -> str:
+        my_string = 'def __init__(self, {params}):\n'.format(params = ', '.join([name if name not in defaults else f'{name}={defaults[name]}' for name in field_names]))
+        for name in field_names:
+            my_string += f'    self.{name} = {name}\n' 
+        return my_string
+        
 
     # Debugging aid: uncomment next call to show_listing to display source code
     # show_listing(class_definition)

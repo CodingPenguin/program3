@@ -58,10 +58,12 @@ def pnamedtuple(type_name, field_names, mutable = False,  defaults =  {}):
 
     def gen_init() -> str:
         my_string = 'def __init__(self, {params}):\n'.format(params = ', '.join([name if name not in defaults else f'{name}={defaults[name]}' for name in field_names]))
-        for name in field_names:
+        for name in names:
             my_string += f'    self.{name} = {name}\n' 
         return my_string
         
+    def gen_make():
+        return '@staticmethod\ndef _make(iterable):\nreturn {type_name'
 
     # Debugging aid: uncomment next call to show_listing to display source code
     # show_listing(class_definition)

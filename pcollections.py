@@ -63,11 +63,11 @@ class {class_name}:
     def gen_repr():   
         field_args = []
         for field_name in names:
-            field_args.append(f'{field_name}=self.{field_name}')
+            field_args.append(f'{field_name}={{self.{field_name}}}')
         
         return '''
     def __repr__(self):
-        return '{class_name}({field_args})' '''.format(class_name=type_name, field_args=','.join(field_args))
+        return f'{class_name}({field_args})' '''.format(class_name=type_name, field_args=','.join(field_args))
     
     def gen_get():
         get_funcs = ''
@@ -82,9 +82,9 @@ class {class_name}:
         return '''
     def __getitem__(self, idx):
         if type(idx) == int and idx in range(len(self._fields)):
-            return eval(f'self.get_{self._fields[idx]}')
+            return eval(f'self.get_{self._fields[idx]}()')
         elif type(idx) == str and idx in self._fields:
-            return eval(f'self.get_{idx}')
+            return eval(f'self.get_{idx}()')
         else:
             raise IndexError'''
     
